@@ -18,7 +18,7 @@ Práctica 3 – Desarrollo Web – UNEMI.
 ```
 crud-usuarios/
 ├── models/
-│   └── Usuario.js
+│   └── Usuario.js 
 ├── routes/
 │   ├── usuarios.js
 │   └── auth.js
