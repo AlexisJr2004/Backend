@@ -3,7 +3,6 @@ const router = express.Router();
 const Usuario = require("../models/Usuario");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
-const { JWT_SECRET } = require("../config");
 const passport = require("../passport-config");
 const { JWT_SECRET, FRONTEND_URL } = require("../config");
 
@@ -53,7 +52,28 @@ router.get(
       JWT_SECRET,
       { expiresIn: "1h" }
     );
-    res.redirect(`${FRONTEND_URL}/?token=${token}`);
+
+    // Página que envía el token a la ventana que abrió el popup y se cierra
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <body>
+        <script>
+          if (window.opener) {
+            window.opener.postMessage(
+              { token: "${token}" },
+              "${FRONTEND_URL}"
+            );
+            window.close();
+          } else {
+            // fallback: si no hay ventana padre, redirige normal
+            window.location.href = "${FRONTEND_URL}/?token=${token}";
+          }
+        </script>
+        <p>Iniciando sesión... puedes cerrar esta ventana.</p>
+      </body>
+      </html>
+    `);
   }
 );
 
