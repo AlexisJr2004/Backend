@@ -5,6 +5,7 @@ const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
 const passport = require("../passport-config");
+const { JWT_SECRET, FRONTEND_URL } = require("../config");
 
 // POST /login
 router.post("/login", async (req, res) => {
@@ -52,7 +53,7 @@ router.get(
       JWT_SECRET,
       { expiresIn: "1h" }
     );
-    res.json({ mensaje: "Login con Google exitoso", token });
+    res.redirect(`${FRONTEND_URL}/?token=${token}`);
   }
 );
 
