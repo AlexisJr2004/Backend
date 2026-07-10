@@ -4,6 +4,7 @@ const Usuario = require("../models/Usuario");
 const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
+const passport = require("../passport-config");
 
 // POST /login
 router.post("/login", async (req, res) => {
@@ -34,5 +35,25 @@ router.post("/login", async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 });
+
+// Iniciar login con Google
+router.get(
+  "/google",
+  passport.authenticate("google", { scope: ["profile", "email"], session: false })
+);
+
+// Callback de Google
+router.get(
+  "/google/callback",
+  passport.authenticate("google", { session: false, failureRedirect: "/" }),
+  (req, res) => {
+    const token = jwt.sign(
+      { id: req.user._id, email: req.user.email },
+      JWT_SECRET,
+      { expiresIn: "1h" }
+    );
+    res.json({ mensaje: "Login con Google exitoso", token });
+  }
+);
 
 module.exports = router;
