@@ -2,6 +2,7 @@ const express = require("express");
 const conectarDB = require("./db");
 const usuariosRoutes = require("./routes/usuarios");
 const authRoutes = require("./routes/auth");
+const cors = require("cors");
 
 const app = express();
 conectarDB();

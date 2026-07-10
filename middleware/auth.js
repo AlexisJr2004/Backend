@@ -1,5 +1,6 @@
 const jwt = require("jsonwebtoken");
 const { JWT_SECRET } = require("../config");
+const cors = require("cors");
 
 const verificarToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
